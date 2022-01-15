@@ -13,27 +13,48 @@ let selectedColor = document.querySelectorAll(".color");
 //load 1st task to ftech old data
 let allTaskData = localStorage.getItem("allTask");
 
-if(allTaskData != null)
-{
-    let data = JSON.parse(allTaskData);
-    for(let i=0;i<data.length;i++)
+    if(allTaskData != null)
     {
-        createTicket(data[i].color,data[i].task,data[i].id);
+        let data = JSON.parse(allTaskData);
+        for(let i=0;i<data.length;i++)
+        {
+            createTicket(data[i].color,data[i].task,data[i].id);
+        }
     }
-}
+     let active=1;
 //for select color
 for(let i=0;i<selectedColor.length;i++)
  {
+     
     selectedColor[i].addEventListener("click",function(e)
      {  
          if(e.currentTarget.classList.contains("active"))
          {
              e.currentTarget.classList.remove("active");
+             location.reload();
+
          }
          else{
              e.currentTarget.classList.add("active");
+              
+             if(active ==1){
+             let cont = document.querySelectorAll(".ticket-cont");
+             for(let j =0;j<cont.length;j++)
+             {
+                 if(selectedColor[i].classList[0] != cont[j].childNodes[0].classList[1])
+                 {
+                     cont[j].remove();
+                 }
+             }
+             active++;
+            }
+            else{
+                
+                location.reload();
+            }
 
          }
+
         });
 }
 addbtn.addEventListener("click",(e)=>{
@@ -101,10 +122,9 @@ function createTicket(ticColor,ticTask,ticID) {
     else{
         let allTaskData = localStorage.getItem("allTask");
         let data = JSON.parse(allTaskData);
-        if(isHere(allTaskData,ticID) ==false){
-        data.push({"id":ticID,"task":ticTask,"color":ticColor});
-        }
-
+            if(isHere(allTaskData,ticID) ==false){
+                data.push({"id":ticID,"task":ticTask,"color":ticColor});
+            }
         localStorage.setItem("allTask",JSON.stringify(data));
         }
 
@@ -137,7 +157,7 @@ function isHere(arr,val)
 
 //remove ticket 
 rm.addEventListener("click",function(e){
-    let selectActive = document.querySelectorAll(".ticket-cont.active");
+        let selectActive = document.querySelectorAll(".ticket-cont.active");
     let ids = document.querySelectorAll(".active>.ticket-id");
     let data = JSON.parse(allTaskData);
 
